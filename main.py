@@ -3,7 +3,7 @@ import mysql.connector
 from random import randint
 import re
 
-from functions import create_email, pick_card_type, generate_card_number, pick_random_user, pick_random_car
+from functions import create_email, pick_card_type, generate_card_number, pick_random_user, pick_random_car, generate_password
 from random_data_gen import names, surnames
 
 #Stvaranje konekcije sa mysql bazom podataka
@@ -11,7 +11,7 @@ mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
     passwd = "password123",
-    database = "databasename"
+    database = "smart_park_final"
     )
 
 mycursor = mydb.cursor()
@@ -45,18 +45,19 @@ while(unos != 0):
             new_name = names[randint(0,49)]
             new_surname = surnames[randint(0,49)]
             new_email = create_email(email_list, new_name, new_surname)
+            new_password = generate_password()
             email_list.append(new_email)
-            new_list.append((i,new_name,new_surname, new_email))
+            new_list.append((i,new_name,new_surname, new_email, new_password))
 
         #Generiranje sql izraza
         sql_txt = ""
         for i in new_list[last_korisnikID:]:
-            sql_txt += "(%s, '%s', '%s', '%s'),"%(i[0], i[1], i[2], i[3])
+            sql_txt += "(%s, '%s', '%s', '%s', '%s'),"%(i[0], i[1], i[2], i[3], i[4])
         print("Ubačeni su sljedeći podaci: ")
         print(sql_txt[:-1])
 
         #Ubacivanje podataka u bazu (tablica korisnik)
-        sql = "INSERT INTO korisnik (korisnikID, ime, prezime, email) VALUES %s"%(sql_txt[:-1])
+        sql = "INSERT INTO korisnik (korisnikID, ime, prezime, email, lozinka) VALUES %s"%(sql_txt[:-1])
 
         mycursor.execute(sql)
 

@@ -22,6 +22,19 @@ def create_email(email_list, new_name, new_surname):
             
     return new_email
 
+def generate_password():
+    number_of_chars = randint(8, 20)
+    password = ""
+    for i in range(number_of_chars):
+        char = chr(randint(97, 122))
+        password += char
+        
+    numbers_in_password = randint(0, 6)
+    for i in range(numbers_in_password):
+        password += str(randint(0, 9))
+        
+    return password
+    
 #Definiranje potrebnih funkcija za tablicu kartica
 def pick_card_type():
 	random_number = randint(0,1)
